@@ -1,0 +1,30 @@
+diff --git a/node_modules/@graphcommerce/next-ui/LayoutDefault/components/LayoutDefault.tsx b/node_modules/@graphcommerce/next-ui/LayoutDefault/components/LayoutDefault.tsx
+index 30fc40b..75c4f8a 100644
+--- a/node_modules/@graphcommerce/next-ui/LayoutDefault/components/LayoutDefault.tsx
++++ b/node_modules/@graphcommerce/next-ui/LayoutDefault/components/LayoutDefault.tsx
+@@ -63,7 +63,8 @@ export function LayoutDefault(props: LayoutDefaultProps) {
+           display: 'grid',
+           gridTemplateRows: { xs: 'auto 1fr auto', md: 'auto auto 1fr auto' },
+           gridTemplateColumns: '100%',
+-          background: theme.palette.background.default,
++          background: theme.palette.background.default
++  
+         }),
+         ...(Array.isArray(sx) ? sx : [sx]),
+       ]}
+@@ -77,6 +78,7 @@ export function LayoutDefault(props: LayoutDefaultProps) {
+           component='header'
+           className={classes.header}
+           sx={(theme) => ({
++           
+             zIndex: theme.zIndex.appBar - 1,
+             display: 'flex',
+             alignItems: 'center',
+@@ -92,6 +94,7 @@ export function LayoutDefault(props: LayoutDefaultProps) {
+               display: 'flex',
+               justifyContent: 'left',
+               width: '100%',
++              backgroundColor :'#0E1D6B'
+             },
+             '&.sticky': {
+               [theme.breakpoints.down('md')]: {
