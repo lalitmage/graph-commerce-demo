@@ -3,6 +3,8 @@ import { magentoMenuToNavigation } from '@graphcommerce/magento-category'
 import { CustomerFab, CustomerMenuFabItem } from '@graphcommerce/magento-customer'
 import { SearchFab, SearchField } from '@graphcommerce/magento-search'
 import { WishlistFab, WishlistMenuFabItem } from '@graphcommerce/magento-wishlist'
+// import MenuDropdown from './MenuDropdown'
+import Image from 'next/image';
 import {
   DesktopNavActions,
   DesktopNavBar,
@@ -31,6 +33,16 @@ import { Footer } from './Footer'
 import { LayoutQuery } from './Layout.gql'
 import { Logo } from './Logo'
 import { productListRenderer } from '../ProductListItems/productListRenderer'
+import Link from 'next/link'
+import NavLinks from './CustomCode/CustomNavlinks'
+import MenuDropdown from './CustomCode/MenuDropdown'
+import CategoriesDropdown from './CustomCode/CategoriesDropdown'
+import { BannerSlider } from './CustomCode/BannerSlider'
+import ShoppingBasket from './CustomCode/ShoppingBasket'
+import styles from './LayoutNavigation.module.css'
+
+
+
 
 export type LayoutNavigationProps = LayoutQuery &
   Omit<LayoutDefaultProps, 'footer' | 'header' | 'cartFab' | 'menuFab'>
@@ -103,14 +115,62 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
           itemPadding='md'
         />
       </NavigationProvider>
-
+      <div style={{ background: '#E9E9E9', textAlign: 'center', padding: '5px 0' }}>
+        <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '13px', color: '#222', margin: 0 }}>
+          Welcome to Tong Garden India
+        </p>
+      </div>
       <LayoutDefault
         {...uiProps}
         noSticky={router.asPath.split('?')[0] === '/'}
         header={
           <>
-            <Logo />
+<div className={styles.container}>
+  <div className={styles.innerheader}>
+  <div className={styles.headerlogo}>
+<Link href="/" passHref>
+              <Image
+                src="https://indiastaging.tonggardenintranetlive.com/media/logo/stores/1/logo_1.png"
+                alt="Tong Garden"
+                // width={auto} 
+                width={218}
+                height={22}
+                max-width={218}
+              />
+            </Link>
+</div>
+<div className={styles.menuslink}>  <NavLinks /></div>
+<div className={styles.userlinks}>
+<DesktopNavActions>
 
+<Fab
+  href='/service'
+  aria-label={i18n._(/* i18n */ 'Customer Service')}
+  size='large'
+  color='inherit'
+>
+  <IconSvg src={iconCustomerService} size='large' />
+</Fab>
+<WishlistFab icon={<IconSvg src={iconHeart} size='large' />} />
+<CustomerFab guestHref='/account/signin' authHref='/account' />
+{/* The placeholder exists because the CartFab is sticky but we want to reserve the space for the <CartFab /> */}
+{/* {cartEnabled && <PlaceholderFab />} */}
+{/* <MenuDropdown /> */}
+</DesktopNavActions>
+< MenuDropdown />
+</div>
+  </div>
+</div>
+
+          
+
+          
+
+
+
+
+            {/* <Logo /> */}
+            {/* 
             <DesktopNavBar>
               {menu?.items?.[0]?.children?.slice(0, 2).map((item) => (
                 <DesktopNavItem key={item?.uid} href={`/${item?.url_path}`}>
@@ -134,26 +194,12 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
               <DesktopNavItem href='/blog'>
                 <Trans id='Blog' />
               </DesktopNavItem>
-            </DesktopNavBar>
+            </DesktopNavBar> */}
 
-            <DesktopNavActions>
-              <SearchField
-                formControl={{ sx: { width: '400px' } }}
-                searchField={{ productListRenderer }}
-              />
-              <Fab
-                href='/service'
-                aria-label={i18n._(/* i18n */ 'Customer Service')}
-                size='large'
-                color='inherit'
-              >
-                <IconSvg src={iconCustomerService} size='large' />
-              </Fab>
-              <WishlistFab icon={<IconSvg src={iconHeart} size='large' />} />
-              <CustomerFab guestHref='/account/signin' authHref='/account' />
-              {/* The placeholder exists because the CartFab is sticky but we want to reserve the space for the <CartFab /> */}
-              {cartEnabled && <PlaceholderFab />}
-            </DesktopNavActions>
+
+        
+            
+
 
             <MobileTopRight>
               <SearchFab size='responsiveMedium' />
@@ -164,8 +210,30 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
         cartFab={<CartFab />}
         menuFab={<NavigationFab onClick={() => selection.set([])} />}
       >
+         
+        <div className={styles.container}>
+        <div className={styles.subcontainer}>
+        
+        <div className={styles.innerheader}>
+          
+          <CategoriesDropdown />
+
+            
+          <SearchField
+            formControl={{ sx: { width: '400px' } }}
+            searchField={{ productListRenderer }}
+          />
+
+          <ShoppingBasket />
+
+          </div></div> 
+          </div>
+          <div>
+          <BannerSlider />
+          </div>
         {children}
       </LayoutDefault>
+
     </>
   )
 }

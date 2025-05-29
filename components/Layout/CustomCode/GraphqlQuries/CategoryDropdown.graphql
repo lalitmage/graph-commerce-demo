@@ -1,0 +1,16 @@
+query GetCategories {
+  categories(filters: { name: { match: "Our Products" } }) {
+    items {
+      uid
+      name
+      image
+      url_path
+      children {
+        uid
+        name
+        image
+        url_path
+      }
+    }
+  }
+}

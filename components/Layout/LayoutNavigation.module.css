@@ -1,0 +1,26 @@
+.container {
+  width: 100%;
+  max-width: 1170px;
+  margin: auto;
+}
+.innerheader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+.userlinks {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.menuslink{
+  padding-block: 10px;
+}
+.menuslink a {
+  line-height: 50px;
+  text-decoration: none;
+}
+.header{
+  height: unset;
+}

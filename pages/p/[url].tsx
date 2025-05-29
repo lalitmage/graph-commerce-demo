@@ -83,10 +83,6 @@ function ProductPage(props: Props) {
           </LayoutTitle>
         </LayoutHeader>
 
-        <Typography variant='h1' gutterBottom sx={{ textAlign: 'center' }}>
-  Hello
-</Typography>
-
         <ProductPageJsonLd
           product={product}
           render={(p) => ({

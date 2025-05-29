@@ -13,7 +13,7 @@ const config: IGraphQLConfig = {
   ],
   extensions: {
     languageService: { useSchemaFileDefinitions: true },
-    endpoints: { default: { url: 'https://php81.webepower.biz/pwamg247/pub/graphql/' } },
+    endpoints: { default: { url: 'http://localhost:3000/api/graphql/' } },
   },
 }
 

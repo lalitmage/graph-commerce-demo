@@ -1,0 +1,55 @@
+.menuContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.menuButton {
+  background: #f8ac1a; 
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 5px;
+}
+
+.menuIcon {
+  display: block;
+}
+
+.arrow {
+  font-size: 14px;
+}
+
+.menuButton:hover {
+  background: #e09c17; /* Darker yellow on hover */
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #f8ac1a; /* Same yellow as button */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  min-width: 200px;
+  z-index: 100;
+  padding: 5px 0;
+}
+
+.dropdownItem {
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.dropdownItem:hover {
+  background: #e09c17; /* Darker yellow on hover */
+}

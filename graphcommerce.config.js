@@ -10,7 +10,7 @@ const config = {
   limitSsg: true,
 
   hygraphEndpoint: 'https://eu-central-1.cdn.hygraph.com/content/ckhx7xadya6xs01yxdujt8i80/master',
-  magentoEndpoint: 'https://php81.webepower.biz/pwamg247/pub/graphql',
+  magentoEndpoint: 'https://indiastaging.tonggardenintranetlive.com/graphql',
   magentoVersion: 247,
   canonicalBaseUrl: 'https://graphcommerce.vercel.app',
   storefront: [

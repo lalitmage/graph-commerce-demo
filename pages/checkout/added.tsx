@@ -1,7 +1,11 @@
 import { PageOptions } from '@graphcommerce/framer-next-pages'
 import { Image } from '@graphcommerce/image'
 import { getCartDisabled, useCrosssellItems } from '@graphcommerce/magento-cart'
-import { AddProductsToCartForm, ProductScroller } from '@graphcommerce/magento-product'
+import {
+  AddProductsToCartForm,
+  ProductScroller,
+  type ProductListItemType,
+} from '@graphcommerce/magento-product'
 import { PageMeta, StoreConfigDocument } from '@graphcommerce/magento-store'
 import {
   Button,
@@ -31,6 +35,9 @@ function CheckoutAdded() {
 
   const name = addedItem?.product.name ?? ''
 
+  // 👇 Cast crossSellItems to the expected ProductListItemType
+  const crossSellItemsTyped = crossSellItems as ProductListItemType[]
+
   return (
     <>
       <PageMeta title={i18n._(/* i18n */ 'Cart')} metaRobots={['noindex']} />
@@ -51,7 +58,6 @@ function CheckoutAdded() {
             xs: 'min-content 1fr auto',
             md: 'min-content 1fr max-content auto',
           },
-
           '&.IconSvg': {
             gridArea: 'children',
           },
@@ -90,7 +96,7 @@ function CheckoutAdded() {
               <strong>{name}</strong> has been added to your shopping cart!
             </Trans>
           </Box>
-          {crossSellItems.length > 0 && (
+          {crossSellItemsTyped.length > 0 && (
             <Box sx={{ typography: 'body1', display: { xs: 'none', md: 'block' } }} tabIndex={0}>
               <Trans>Complete your purchase</Trans>
             </Box>
@@ -112,7 +118,7 @@ function CheckoutAdded() {
         <LayoutHeaderClose />
       </Container>
 
-      {crossSellItems.length > 0 && (
+      {crossSellItemsTyped.length > 0 && (
         <>
           <Container maxWidth={false}>
             <Divider />
@@ -134,7 +140,7 @@ function CheckoutAdded() {
           >
             <ProductScroller
               productListRenderer={productListRenderer}
-              items={crossSellItems}
+              items={crossSellItemsTyped}
               sx={(theme) => ({ mb: theme.page.vertical })}
             />
           </AddProductsToCartForm>
@@ -173,3 +179,4 @@ export const getStaticProps: GetPageStaticProps = async (context) => {
     },
   }
 }
+

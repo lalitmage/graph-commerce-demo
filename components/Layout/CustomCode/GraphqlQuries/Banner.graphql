@@ -1,0 +1,13 @@
+query GetAllBannerSliders {
+  getAllBannerSliders {
+    id
+    name
+    status
+    banners {
+      id
+      title
+      image_url
+      link
+    }
+  }
+}
