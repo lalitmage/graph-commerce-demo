@@ -1,0 +1,27 @@
+query GetProductsByCategoryId($id: Int!) {
+  category(id: $id) {
+    uid
+    id
+    name
+    products(pageSize: 10) {
+      items {
+        uid
+        id
+        name
+        sku
+        url_key
+        image {
+          url
+        }
+        price_range {
+          minimum_price {
+            final_price {
+              value
+              currency
+            }
+          }
+        }
+      }
+    }
+  }
+}

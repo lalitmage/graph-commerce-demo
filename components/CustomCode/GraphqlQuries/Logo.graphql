@@ -1,0 +1,7 @@
+query StoreLogo {
+  getStoreLogo {
+    logo_url
+    logo_alt
+    logo_link
+  }
+}

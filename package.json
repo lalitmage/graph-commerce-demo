@@ -10,16 +10,14 @@
     "node": ">=18.19.0 <22.0.0"
   },
   "scripts": {
-  
-    "dev": "npx concurrently -k -n codegen,next 'gc-gql-codegen -w' 'next dev' -c 'magenta,cyan'",
-
-    "codegen": "npx graphcommerce codegen && npx gc-mesh build && npx gc-gql-codegen",
-    "build": "npx graphcommerce codegen && npx gc-mesh build && npx gc-gql-codegen && npx next build",
-    "start": "npx next start",
+    "dev": "concurrently -k -n codegen,next 'gc-gql-codegen -w' 'next dev' -c 'magenta,cyan'",
+    "codegen": "graphcommerce codegen && gc-mesh build && gc-gql-codegen",
+    "build": "graphcommerce codegen && gc-mesh build && gc-gql-codegen && next build",
+    "start": "next start",
     "tsc:lint": "tsc --noEmit -p .",
     "tsc:perf": "NODE_OPTIONS=--max_old_space_size=10000 tsc --noEmit --generateTrace tsctrace --incremental false && npx @typescript/analyze-trace tsctrace",
     "lingui": "cross-env NODE_ENV=development lingui extract --clean",
-    "postinstall": "node ./node_modules/.bin/is-monorepo '[pkgrun] postinstall' '[pkgrun] patch-package'",
+    "postinstall": "is-monorepo '[pkgrun] postinstall' '[pkgrun] patch-package'",
     "create-patch": "patch-package --exclude 'package.json$|gql.ts$|interceptor.tsx$'"
   },
   "dependencies": {
@@ -107,7 +105,7 @@
     "@lingui/macro": "4.14.1",
     "@lingui/react": "4.14.1",
     "@lingui/swc-plugin": "4.1.0",
-    "@mui/icons-material": "^5.11.16",
+    "@mui/icons-material": "^7.0.1",
     "@mui/lab": "5.0.0-alpha.173",
     "@mui/material": "5.16.8",
     "@mui/utils": "^5.16.8",
@@ -120,6 +118,10 @@
     "dotenv": "16.4.7",
     "framer-motion": "11.15.0",
     "graphql": "^16.10.0",
+    "he": "^1.2.0",
+    "html-react-parser": "^5.2.3",
+    "jsdom": "^26.1.0",
+    "keen-slider": "^6.8.6",
     "lucide-react": "^0.487.0",
     "next": "15.1.0",
     "next-sitemap": "4.2.3",
@@ -128,6 +130,7 @@
     "react-hook-form": "^7.54.1",
     "serwist": "^9.0.11",
     "sharp": "0.33.5",
+    "swiper": "^11.2.8",
     "ts-node": "^10.9.2",
     "webpack": "^5.97.1"
   },
@@ -137,6 +140,7 @@
     "@graphcommerce/typescript-config-pwa": "9.0.4",
     "@lingui/cli": "4.14.1",
     "@playwright/test": "1.49.1",
+    "@types/he": "^1",
     "@types/node": "^18.19.68",
     "@types/react": "^18.3.17",
     "@types/react-dom": "^18.3.5",

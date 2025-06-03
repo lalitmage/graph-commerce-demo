@@ -1,0 +1,10 @@
+query GetSubcategoriesOf45Tabs {
+  category(id: 45) {
+    uid
+    name
+    children {
+      uid
+      name
+    }
+  }
+}

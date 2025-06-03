@@ -1,0 +1,180 @@
+.container {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.carouselWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel {
+  overflow: hidden;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.carouselInner {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  width: 100%;
+}
+
+.slide {
+  min-width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.media {
+  width: 50%;
+}
+
+.media iframe,
+.media video,
+.media img {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.content {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.content h3 {
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.content p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+/* Updated Discover More button */
+.content a.btnTheme,
+.content .btnTheme,
+a.btnTheme,
+.btnTheme {
+  background-color: #28a745 !important;
+  color: white !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 6px !important;
+  text-decoration: none !important;
+  font-weight: bold !important;
+  display: inline-block !important;
+  margin-top: 1rem !important;
+  border: none !important;
+  cursor: pointer !important;
+  font-size: 1rem !important;
+  line-height: 1.2 !important;
+}
+
+.content a.btnTheme:hover,
+.content .btnTheme:hover,
+a.btnTheme:hover,
+.btnTheme:hover {
+  background-color: #218838 !important;
+  color: white !important;
+  text-decoration: none !important;
+}
+
+/* Carousel Arrows */
+.arrowLeft,
+.arrowRight {
+  background: white;
+  border: none;
+  color: #28a745;
+  font-size: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+.arrowLeft:hover,
+.arrowRight:hover {
+  background-color: #1a73e8;
+  color: white;
+}
+
+.arrowLeft {
+  left: -30px;
+}
+
+.arrowRight {
+  right: -30px;
+}
+
+/* Pagination Dots */
+.pagination {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  background: #ccc;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.dot:hover {
+  background: red;
+}
+
+.activeDot {
+  background-color: #28a745;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .slide {
+    flex-direction: column;
+  }
+
+  .media,
+  .content {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .arrowLeft,
+  .arrowRight {
+    display: none;
+  }
+}

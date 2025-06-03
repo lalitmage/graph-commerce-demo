@@ -1,0 +1,21 @@
+.shippingBlock {
+  margin-top: 20px;
+}
+
+.shippingBlock .home-free-shipping {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.shippingBlock .shipping-left-box {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+}
+
+.shippingBlock .shipping-img img {
+  max-width: 100%;
+  height: auto;
+}

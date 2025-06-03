@@ -5,6 +5,7 @@ import { Footer as FooterBase } from '@graphcommerce/next-ui'
 import { Trans } from '@lingui/macro'
 import { Button, IconButton, Link } from '@mui/material'
 import { FooterQueryFragment } from './FooterQueryFragment.gql'
+import CustomFooter from '../CustomCode/CustomFooter'
 
 export type FooterProps = FooterQueryFragment
 
@@ -13,6 +14,7 @@ export function Footer(props: FooterProps) {
   const cartEnabled = useCheckoutGuestEnabled()
 
   return (
+    <>
     <FooterBase
       socialLinks={footer?.socialLinks?.map((link) => (
         <IconButton key={link.title} href={link.url} color='inherit' size='medium' edge='start'>
@@ -64,5 +66,8 @@ export function Footer(props: FooterProps) {
         </>
       }
     />
+    <CustomFooter />
+    
+    </>
   )
 }

@@ -1,0 +1,14 @@
+#import '@graphcommerce/magento-product/components/ProductListItem/ProductListItem.graphql'
+
+query GetProductsByCategoryId($id: Int!) {
+  category(id: $id) {
+    uid
+    id
+    name
+    products(pageSize: 10) {
+      items {
+        ...ProductListItem
+      }
+    }
+  }
+}

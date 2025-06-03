@@ -1,0 +1,6 @@
+query ShippingBlock($identifier: String!) {
+  getCmsBlock(identifier: $identifier) {
+    title
+    content
+  }
+}

@@ -1,0 +1,6 @@
+query HeaderTopContent($identifier: String!) {
+  getCmsBlock(identifier: $identifier) {
+    title
+    content
+  }
+}

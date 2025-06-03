@@ -3,6 +3,7 @@ import { magentoMenuToNavigation } from '@graphcommerce/magento-category'
 import { CustomerFab, CustomerMenuFabItem } from '@graphcommerce/magento-customer'
 import { SearchFab, SearchField } from '@graphcommerce/magento-search'
 import { WishlistFab, WishlistMenuFabItem } from '@graphcommerce/magento-wishlist'
+import { Logo } from '../CustomCode/Logo'
 // import MenuDropdown from './MenuDropdown'
 import Image from 'next/image';
 import {
@@ -31,15 +32,16 @@ import { Divider, Fab } from '@mui/material'
 import { useRouter } from 'next/router'
 import { Footer } from './Footer'
 import { LayoutQuery } from './Layout.gql'
-import { Logo } from './Logo'
+// import { Logo } from './Logo'
 import { productListRenderer } from '../ProductListItems/productListRenderer'
 import Link from 'next/link'
-import NavLinks from './CustomCode/CustomNavlinks'
-import MenuDropdown from './CustomCode/MenuDropdown'
-import CategoriesDropdown from './CustomCode/CategoriesDropdown'
-import { BannerSlider } from './CustomCode/BannerSlider'
-import ShoppingBasket from './CustomCode/ShoppingBasket'
+import NavLinks from '../CustomCode/CustomNavlinks'
+import MenuDropdown from '../CustomCode/MenuDropdown'
+import CategoriesDropdown from '../CustomCode/CategoriesDropdown'
+
+import ShoppingBasket from '../CustomCode/ShoppingBasket'
 import styles from './LayoutNavigation.module.css'
+import { HeaderTopContent } from '../CustomCode/HeaderTopContent'
 
 
 
@@ -115,56 +117,63 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
           itemPadding='md'
         />
       </NavigationProvider>
-      <div style={{ background: '#E9E9E9', textAlign: 'center', padding: '5px 0' }}>
+       {/* <div style={{ background: '#E9E9E9', textAlign: 'center', padding: '5px 0' }}>
         <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '13px', color: '#222', margin: 0 }}>
           Welcome to Tong Garden India
         </p>
-      </div>
+      </div>  */}
+      
+          <HeaderTopContent />
+   
+     
       <LayoutDefault
         {...uiProps}
         noSticky={router.asPath.split('?')[0] === '/'}
         header={
           <>
-<div className={styles.container}>
-  <div className={styles.innerheader}>
-  <div className={styles.headerlogo}>
-<Link href="/" passHref>
-              <Image
-                src="https://indiastaging.tonggardenintranetlive.com/media/logo/stores/1/logo_1.png"
-                alt="Tong Garden"
-                // width={auto} 
-                width={218}
-                height={22}
-                max-width={218}
-              />
-            </Link>
-</div>
-<div className={styles.menuslink}>  <NavLinks /></div>
-<div className={styles.userlinks}>
-<DesktopNavActions>
-
-<Fab
-  href='/service'
-  aria-label={i18n._(/* i18n */ 'Customer Service')}
-  size='large'
-  color='inherit'
->
-  <IconSvg src={iconCustomerService} size='large' />
-</Fab>
-<WishlistFab icon={<IconSvg src={iconHeart} size='large' />} />
-<CustomerFab guestHref='/account/signin' authHref='/account' />
-{/* The placeholder exists because the CartFab is sticky but we want to reserve the space for the <CartFab /> */}
-{/* {cartEnabled && <PlaceholderFab />} */}
-{/* <MenuDropdown /> */}
-</DesktopNavActions>
-< MenuDropdown />
-</div>
-  </div>
-</div>
-
+            <div className={styles.container}>
           
+              <div className={styles.innerheader}>
+                <div className={styles.headerlogo}>
+                  {/* <Link href="/" passHref>
+                    <Image
+                      src="https://indiastaging.tonggardenintranetlive.com/media/logo/stores/1/logo_1.png"
+                      alt="Tong Garden"
+                   
+                      width={218}
+                      height={22}
+                      max-width={218}
+                    />
+                  </Link> */}
 
-          
+                  <Logo />
+                </div>
+                <div className={styles.menuslink}>  <NavLinks /></div>
+                <div className={styles.userlinks}>
+                  <DesktopNavActions>
+
+                    <Fab
+                      href='/service'
+                      aria-label={i18n._(/* i18n */ 'Customer Service')}
+                      size='large'
+                      color='inherit'
+                    >
+                      <IconSvg src={iconCustomerService} size='large' />
+                    </Fab>
+                    <WishlistFab icon={<IconSvg src={iconHeart} size='large' />} />
+                    <CustomerFab guestHref='/account/signin' authHref='/account' />
+                    {/* The placeholder exists because the CartFab is sticky but we want to reserve the space for the <CartFab /> */}
+                    {/* {cartEnabled && <PlaceholderFab />} */}
+                    {/* <MenuDropdown /> */}
+                  </DesktopNavActions>
+                  < MenuDropdown />
+                </div>
+              </div>
+            </div>
+
+
+
+
 
 
 
@@ -197,8 +206,8 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
             </DesktopNavBar> */}
 
 
-        
-            
+
+
 
 
             <MobileTopRight>
@@ -210,27 +219,27 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
         cartFab={<CartFab />}
         menuFab={<NavigationFab onClick={() => selection.set([])} />}
       >
-         
+
         <div className={styles.container}>
-        <div className={styles.subcontainer}>
-        
-        <div className={styles.innerheader}>
-          
-          <CategoriesDropdown />
+          <div className={styles.subcontainer}>
 
-            
-          <SearchField
-            formControl={{ sx: { width: '400px' } }}
-            searchField={{ productListRenderer }}
-          />
+            <div className={styles.innerheader}>
 
-          <ShoppingBasket />
+              <CategoriesDropdown />
 
-          </div></div> 
-          </div>
-          <div>
-          <BannerSlider />
-          </div>
+
+              <SearchField
+                formControl={{ sx: { width: '400px' } }}
+                searchField={{ productListRenderer }}
+              />
+
+              <ShoppingBasket />
+
+            </div></div>
+        </div>
+        <div>
+          {/* <BannerSlider /> */}
+        </div>
         {children}
       </LayoutDefault>
 

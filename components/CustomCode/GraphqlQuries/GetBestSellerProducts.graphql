@@ -1,0 +1,27 @@
+query GetBestSellerProducts {
+  category(id: 59) {
+    uid
+    id
+    name
+    products(pageSize: 20) {
+      items {
+        uid
+        id
+        name
+        sku
+        url_key
+        image {
+          url
+        }
+        price_range {
+          minimum_price {
+            final_price {
+              value
+              currency
+            }
+          }
+        }
+      }
+    }
+  }
+}

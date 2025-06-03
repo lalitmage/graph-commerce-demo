@@ -1,0 +1,9 @@
+query GetWhyWeAreCmsBlock {
+  cmsBlocks(identifiers: ["home-why-we-are-section"]) {
+    items {
+      identifier
+      title
+      content
+    }
+  }
+}
