@@ -1,3 +1,44 @@
+diff --git a/node_modules/@graphcommerce/magento-search/CHANGELOG.md b/node_modules/@graphcommerce/magento-search/CHANGELOG.md
+index 3d3539f..8f4d842 100644
+--- a/node_modules/@graphcommerce/magento-search/CHANGELOG.md
++++ b/node_modules/@graphcommerce/magento-search/CHANGELOG.md
+@@ -1,5 +1,7 @@
+ # Change Log
+ 
++## 9.0.4
++
+ ## 9.0.3
+ 
+ ## 9.0.3-canary.0
+diff --git a/node_modules/@graphcommerce/magento-search/CategorySearch.gql.ts b/node_modules/@graphcommerce/magento-search/CategorySearch.gql.ts
+new file mode 100644
+index 0000000..4443622
+--- /dev/null
++++ b/node_modules/@graphcommerce/magento-search/CategorySearch.gql.ts
+@@ -0,0 +1,13 @@
++/* eslint-disable */
++import * as Types from '@graphcommerce/graphql-mesh/.mesh';
++
++import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
++
++export const CategorySearchDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"CategorySearch"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pageSize"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"10"}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"search"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}},"defaultValue":{"kind":"StringValue","value":"","block":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"categories"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"match"},"value":{"kind":"Variable","name":{"kind":"Name","value":"search"}}}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"pageSize"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pageSize"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"url_path"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CategoryInterface"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"include_in_menu"}},{"kind":"Field","name":{"kind":"Name","value":"breadcrumbs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"category_uid"}},{"kind":"Field","name":{"kind":"Name","value":"category_name"}},{"kind":"Field","name":{"kind":"Name","value":"category_url_path"}},{"kind":"Field","name":{"kind":"Name","value":"category_level"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<CategorySearchQuery, CategorySearchQueryVariables>;
++export type CategorySearchQueryVariables = Types.Exact<{
++  pageSize?: Types.InputMaybe<Types.Scalars['Int']['input']>;
++  search?: Types.InputMaybe<Types.Scalars['String']['input']>;
++}>;
++
++
++export type CategorySearchQuery = { categories?: { items?: Array<{ include_in_menu?: number | null, uid: string, url_path?: string | null, name?: string | null, breadcrumbs?: Array<{ category_uid: string, category_name?: string | null, category_url_path?: string | null, category_level?: number | null } | null> | null } | null> | null } | null };
+diff --git a/node_modules/@graphcommerce/magento-search/components/CategorySearchResult/CategorySearchResult.gql.ts b/node_modules/@graphcommerce/magento-search/components/CategorySearchResult/CategorySearchResult.gql.ts
+new file mode 100644
+index 0000000..705b087
+--- /dev/null
++++ b/node_modules/@graphcommerce/magento-search/components/CategorySearchResult/CategorySearchResult.gql.ts
+@@ -0,0 +1,4 @@
++/* eslint-disable */
++import * as Types from '@graphcommerce/graphql-mesh/.mesh';
++
++export type CategorySearchResultFragment = { uid: string, url_path?: string | null, name?: string | null, include_in_menu?: number | null, breadcrumbs?: Array<{ category_uid: string, category_name?: string | null, category_url_path?: string | null, category_level?: number | null } | null> | null };
 diff --git a/node_modules/@graphcommerce/magento-search/components/ProductFiltersPro/SearchField.tsx b/node_modules/@graphcommerce/magento-search/components/ProductFiltersPro/SearchField.tsx
 index e2e243d..ffb63af 100644
 --- a/node_modules/@graphcommerce/magento-search/components/ProductFiltersPro/SearchField.tsx

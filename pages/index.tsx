@@ -12,6 +12,16 @@ import {
   RowRenderer,
 } from '../components'
 import { graphqlSharedClient, graphqlSsrClient } from '../lib/graphql/graphqlSsrClient'
+import { BannerSlider } from '../components/CustomCode/BannerSlider'
+import { ShippingBlock } from '../components/CustomCode/ShippingBlock'
+import { ShopNowCarousel } from '../components/CustomCode/ShopNowCarousel'
+import { WhoWeAreCarousel } from '../components/CustomCode/WhoWeAreCarousel'
+import { BestSellersCarousel } from '../components/CustomCode/BestSellerCarousel'
+import { LatestProductsCarousel } from '../components/CustomCode/LatestProductsCarousel'
+import NewsletterSubscription from '../components/CustomCode/NewsletterSubscription'
+
+
+
 
 type Props = HygraphPagesQuery & {
   latestList: ProductListQuery
@@ -39,8 +49,22 @@ function CmsPage(props: Props) {
       />
 
       <LayoutHeader floatingMd floatingSm />
+      <BannerSlider />
 
-      {page && (
+      <ShippingBlock />
+      <ShopNowCarousel />
+      <WhoWeAreCarousel />
+      <BestSellersCarousel />
+      <LatestProductsCarousel />
+      <NewsletterSubscription />
+
+    
+
+  
+      
+      
+
+      {/* {page && (
         <RowRenderer
           content={page.content}
           renderer={{
@@ -63,7 +87,7 @@ function CmsPage(props: Props) {
             },
           }}
         />
-      )}
+      )} */}
     </>
   )
 }

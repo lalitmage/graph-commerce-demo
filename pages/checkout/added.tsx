@@ -179,4 +179,3 @@ export const getStaticProps: GetPageStaticProps = async (context) => {
     },
   }
 }
-
