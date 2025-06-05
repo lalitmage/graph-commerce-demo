@@ -1,4 +1,3 @@
-
 import { StoreLogoDocument } from './GraphqlQuries/Logo.gql'
 import { useQuery } from '@graphcommerce/graphql'
 import Link from 'next/link'
@@ -9,10 +8,10 @@ export function Logo() {
 
   if (!data?.getStoreLogo?.logo_url) return null
 
-  const { logo_url, logo_alt, logo_link } = data.getStoreLogo
+  const { logo_url, logo_alt } = data.getStoreLogo 
 
   return (
-    <Link href={logo_link || '/'} passHref>
+    <Link href="/" passHref>
       <Image
         src={logo_url}
         alt={logo_alt || 'Store Logo'}

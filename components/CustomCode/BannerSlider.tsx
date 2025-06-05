@@ -20,7 +20,8 @@ export function BannerSlider() {
       id: b.id!,
       title: b.title ?? '',
       image_url: b.image_url, 
-      link: b.link ?? '#',
+      link: new URL(b.link, 'https://indiastaging.tonggardenintranetlive.com').pathname || '#'
+
     }))
 
   useEffect(() => {
@@ -41,7 +42,7 @@ export function BannerSlider() {
     <Box
       sx={{
         position: 'relative',
-        width: '100vw',
+        width: '100%',
         height: '578px',
         overflow: 'hidden',
         backgroundColor: '#eee',
