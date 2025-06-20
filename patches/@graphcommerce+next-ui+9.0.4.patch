@@ -28,3 +28,14 @@ index 30fc40b..75c4f8a 100644
              },
              '&.sticky': {
                [theme.breakpoints.down('md')]: {
+diff --git a/node_modules/@graphcommerce/next-ui/LayoutParts/DesktopNavActions.tsx b/node_modules/@graphcommerce/next-ui/LayoutParts/DesktopNavActions.tsx
+index a00717a..fe5c56d 100644
+--- a/node_modules/@graphcommerce/next-ui/LayoutParts/DesktopNavActions.tsx
++++ b/node_modules/@graphcommerce/next-ui/LayoutParts/DesktopNavActions.tsx
+@@ -11,5 +11,6 @@ export const DesktopNavActions = styled('div', { name: 'DesktopNavActions' })(({
+     alignItems: 'center',
+     gridAutoFlow: 'column',
+     columnGap: 6,
++    color:'white'
+   },
+ }))
