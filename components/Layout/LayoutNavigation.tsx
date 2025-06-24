@@ -5,7 +5,7 @@ import { SearchFab, SearchField } from '@graphcommerce/magento-search'
 import { WishlistFab, WishlistMenuFabItem } from '@graphcommerce/magento-wishlist'
 import { Logo } from '../CustomCode/Logo'
 // import MenuDropdown from './MenuDropdown'
-import Image from 'next/image';
+import Image from 'next/image'
 import {
   DesktopNavActions,
   DesktopNavBar,
@@ -42,9 +42,6 @@ import CategoriesDropdown from '../CustomCode/CategoriesDropdown'
 import ShoppingBasket from '../CustomCode/ShoppingBasket'
 import styles from './LayoutNavigation.module.css'
 import { HeaderTopContent } from '../CustomCode/HeaderTopContent'
-
-
-
 
 export type LayoutNavigationProps = LayoutQuery &
   Omit<LayoutDefaultProps, 'footer' | 'header' | 'cartFab' | 'menuFab'>
@@ -117,22 +114,20 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
           itemPadding='md'
         />
       </NavigationProvider>
-       {/* <div style={{ background: '#E9E9E9', textAlign: 'center', padding: '5px 0' }}>
+      {/* <div style={{ background: '#E9E9E9', textAlign: 'center', padding: '5px 0' }}>
         <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '13px', color: '#222', margin: 0 }}>
           Welcome to Tong Garden India
         </p>
       </div>  */}
-      
-          <HeaderTopContent />
-   
-     
+
+      <HeaderTopContent />
+
       <LayoutDefault
         {...uiProps}
         noSticky={router.asPath.split('?')[0] === '/'}
         header={
           <>
             <div className={styles.container}>
-          
               <div className={styles.innerheader}>
                 <div className={styles.headerlogo}>
                   {/* <Link href="/" passHref>
@@ -148,10 +143,12 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
 
                   <Logo />
                 </div>
-                <div className={styles.menuslink}>  <NavLinks /></div>
+                <div className={styles.menuslink}>
+                  {' '}
+                  <NavLinks />
+                </div>
                 <div className={styles.userlinks}>
                   <DesktopNavActions>
-
                     <Fab
                       href='/service'
                       aria-label={i18n._(/* i18n */ 'Customer Service')}
@@ -166,17 +163,10 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
                     {/* {cartEnabled && <PlaceholderFab />} */}
                     {/* <MenuDropdown /> */}
                   </DesktopNavActions>
-                  < MenuDropdown />
+                  <MenuDropdown />
                 </div>
               </div>
             </div>
-
-
-
-
-
-
-
 
             {/* <Logo /> */}
             {/* 
@@ -205,11 +195,6 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
               </DesktopNavItem>
             </DesktopNavBar> */}
 
-
-
-
-
-
             <MobileTopRight>
               <SearchFab size='responsiveMedium' />
             </MobileTopRight>
@@ -219,14 +204,10 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
         cartFab={<CartFab />}
         menuFab={<NavigationFab onClick={() => selection.set([])} />}
       >
-
         <div className={styles.container}>
           <div className={styles.subcontainer}>
-
             <div className={styles.innerheader}>
-
               <CategoriesDropdown />
-
 
               <SearchField
                 formControl={{ sx: { width: '400px' } }}
@@ -234,15 +215,12 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
               />
 
               <ShoppingBasket />
-
-            </div></div>
+            </div>
+          </div>
         </div>
-        <div>
-          {/* <BannerSlider /> */}
-        </div>
+        <div>{/* <BannerSlider /> */}</div>
         {children}
       </LayoutDefault>
-
     </>
   )
 }
