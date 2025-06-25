@@ -86,6 +86,8 @@
   font-weight: 600;
   margin-top: 12px;
   margin-bottom: 4px;
+  text-decoration: none;
+  color: #000;
 }
 
 .productPrice {
