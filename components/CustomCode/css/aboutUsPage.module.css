@@ -1,0 +1,150 @@
+/* ===== Shared Layout Utilities ===== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -0.75rem;
+}
+
+.col-xs-12,
+.col-sm-8,
+.col-sm-4,
+.col-md-9,
+.col-md-3,
+.col-lg-9,
+.col-lg-3 {
+  padding: 0.75rem;
+}
+
+.col-xs-12 {
+  width: 100%;
+}
+
+@media (min-width: 576px) {
+  .col-sm-8 {
+    width: 66.6667%;
+  }
+
+  .col-sm-4 {
+    width: 33.3333%;
+  }
+}
+
+@media (min-width: 768px) {
+  .col-md-9 {
+    width: 75%;
+  }
+
+  .col-md-3 {
+    width: 25%;
+  }
+}
+
+@media (min-width: 992px) {
+  .col-lg-9 {
+    width: 75%;
+  }
+
+  .col-lg-3 {
+    width: 25%;
+  }
+}
+
+/* ===== Our Brands Page ===== */
+.ourBrands-wrapper {
+  padding: 40px 0;
+}
+
+.ourBrands-main img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.title-style h4,
+.title-style h2 {
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+.title-style p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.bg-light-yellow {
+  background-color: #fff8e1;
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
+
+.title-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.title-description {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* ===== About Us Page ===== */
+.our-story-wrapper,
+.our-history-wrapper,
+.chairman-wrapper {
+  padding: 40px 0;
+}
+
+.our-story-wrapper .title-style,
+.our-history-wrapper .title-style,
+.chairman-wrapper .title-style {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.our-story-wrapper img,
+.our-history-wrapper img,
+.chairman-wrapper img {
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
+  border-radius: 6px;
+}
+
+/* ===== Our Guarantee Page ===== */
+.our-guarantee-wrapper {
+  padding: 40px 0;
+}
+
+.our-guarantee-wrapper .title-style {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.our-guarantee-wrapper img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* ===== General Typography ===== */
+/* ===== General Typography ===== */
+.cmsRootWrapper h2,
+.cmsRootWrapper h4 {
+  line-height: 1.4;
+}
+
+.cmsRootWrapper p {
+  margin-top: 0.5rem;
+  line-height: 1.6;
+}

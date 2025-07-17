@@ -14,15 +14,18 @@ export function BannerSlider() {
   const { data, loading, error } = useQuery(GetAllBannerSlidersDocument)
   const [currentIndex, setCurrentIndex] = useState(0)
 
-  const banners: Banner[] = (data?.getAllBannerSliders?.[0]?.banners || [])
-    .filter((b): b is Banner => !!b && !!b.image_url)
-    .map((b) => ({
-      id: b.id!,
-      title: b.title ?? '',
-      image_url: b.image_url, 
-      link: new URL(b.link, 'https://indiastaging.tonggardenintranetlive.com').pathname || '#'
+ const banners: Banner[] = (data?.getAllBannerSliders?.[0]?.banners || [])
+  .filter((b): b is Banner => !!b && !!b.image_url)
+  .map((b) => ({
+    id: b.id!,
+    title: b.title ?? '',
+    image_url: b.image_url,
+    link: b.link
+      ? `/${new URL(b.link, 'https://indiastaging.tonggardenintranetlive.com')
+          .pathname.replace(/^\/|\.html$/g, '')}`
+      : '#',
+  }))
 
-    }))
 
   useEffect(() => {
     if (banners.length === 0) return

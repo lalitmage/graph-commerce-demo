@@ -42,6 +42,10 @@ import CategoriesDropdown from '../CustomCode/CategoriesDropdown'
 import ShoppingBasket from '../CustomCode/ShoppingBasket'
 import styles from './LayoutNavigation.module.css'
 import { HeaderTopContent } from '../CustomCode/HeaderTopContent'
+import { Heart, UserRound } from 'lucide-react'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import PublicIcon from '@mui/icons-material/Public'
 
 export type LayoutNavigationProps = LayoutQuery &
   Omit<LayoutDefaultProps, 'footer' | 'header' | 'cartFab' | 'menuFab'>
@@ -149,6 +153,29 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
                 </div>
                 <div className={styles.userlinks}>
                   <DesktopNavActions>
+                    <CustomerFab
+                      guestHref='/account/signin'
+                      authHref='/account'
+                      icon={<AccountCircleIcon fontSize='large' />}
+                    />
+
+                    <WishlistFab icon={<FavoriteIcon fontSize='large' />} />
+
+                    {/* <CustomerFab guestHref='/account/signin' authHref='/account' />
+                
+                  
+                    <WishlistFab icon={<IconSvg src={iconHeart} size='large' />} /> */}
+                    {/* <Fab href='/account/signin' size='small' color='inherit' aria-label='Account'>
+  <AccountCircleIcon fontSize='medium' />
+</Fab>
+
+<Fab href='/wishlist' size='small' color='inherit' aria-label='Wishlist'>
+  <FavoriteIcon fontSize='medium' />
+</Fab> */}
+                    <Fab href='#' aria-label='Change Language' size='large' color='inherit'>
+                      <PublicIcon fontSize='large' />
+                    </Fab>
+
                     <Fab
                       href='/service'
                       aria-label={i18n._(/* i18n */ 'Customer Service')}
@@ -157,8 +184,7 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
                     >
                       <IconSvg src={iconCustomerService} size='large' />
                     </Fab>
-                    <WishlistFab icon={<IconSvg src={iconHeart} size='large' />} />
-                    <CustomerFab guestHref='/account/signin' authHref='/account' />
+
                     {/* The placeholder exists because the CartFab is sticky but we want to reserve the space for the <CartFab /> */}
                     {/* {cartEnabled && <PlaceholderFab />} */}
                     {/* <MenuDropdown /> */}

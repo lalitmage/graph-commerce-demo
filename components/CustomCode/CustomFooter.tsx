@@ -22,14 +22,14 @@ const CustomFooter = () => {
           <h3 className={styles.heading}>INFORMATION</h3>
           <ul className={styles.linkList}>
             <li><a href="#">Shop</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact Us</a></li>
+            <li><a href="/about-us">About</a></li>
+            <li><a href="/service/contact-us">Contact Us</a></li>
             <li><a href="#">Blog</a></li>
-            <li><a href="#">Terms & Condition</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Frequently Asked Question</a></li>
-            <li><a href="#">Return & Refund</a></li>
-            <li><a href="#">CSR</a></li>
+            <li><a href="/terms-and-conditions">Terms & Condition</a></li>
+            <li><a href="/privacy-policy">Privacy Policy</a></li>
+            <li><a href="/faq">Frequently Asked Question</a></li>
+            <li><a href="/shipping-return">Return & Refund</a></li>
+            <li><a href="/csr">CSR</a></li>
           </ul>
         </div>
 

@@ -28,7 +28,8 @@ export function LatestProductsCarousel({ data }: LatestProductsCarouselProps) {
 
   const scrollToIndex = (index: number) => setScrollIndex(index * 5)
   const scrollLeft = () => setScrollIndex((prev) => Math.max(prev - 5, 0))
-  const scrollRight = () => setScrollIndex((prev) => (prev + 5 < products.length ? prev + 5 : prev))
+  const scrollRight = () =>
+    setScrollIndex((prev) => (prev + 5 < products.length ? prev + 5 : prev))
 
   useEffect(() => {
     if (carouselRef.current) {
@@ -76,7 +77,9 @@ export function LatestProductsCarousel({ data }: LatestProductsCarouselProps) {
                           alt={product?.name ?? 'Product'}
                           className={styles.productImage}
                         />
-                        <Typography className={styles.productName}>{product?.name}</Typography>
+                        <Typography className={styles.productName}>
+                          {product?.name}
+                        </Typography>
                       </a>
                     </Link>
 
@@ -115,12 +118,15 @@ export function LatestProductsCarousel({ data }: LatestProductsCarouselProps) {
         </>
       )}
 
-      <Box className={styles.viewAllWrapper}>
-        <button className={styles.viewAllButton}>VIEW ALL</button>
-      </Box>
+     <Box className={styles.viewAllWrapper}>
+  <Link href="/latest-products" passHref legacyBehavior>
+    <a className={styles.viewAllButton}>VIEW ALL</a>
+  </Link>
+</Box>
     </Box>
   )
 }
+
 
 // import { useQuery } from '@graphcommerce/graphql'
 // import { Box, Typography, IconButton } from '@mui/material'
@@ -236,6 +242,14 @@ export function LatestProductsCarousel({ data }: LatestProductsCarouselProps) {
 //     </Box>
 //   )
 // }
+
+
+
+
+
+
+
+
 
 // import { useQuery } from '@graphcommerce/graphql'
 // import { Box, Typography, IconButton } from '@mui/material'

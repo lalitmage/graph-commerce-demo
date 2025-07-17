@@ -23,11 +23,11 @@ export default function MenuButton() {
       {isOpen && (
         <div className={styles.dropdown}>
           <Link href="/about-us" className={styles.dropdownItem}>About Us</Link>
-          <Link href="/our-brand" className={styles.dropdownItem}>Our Brand</Link>
+          <Link href="/our-brands" className={styles.dropdownItem}>Our Brand</Link>
           <Link href="/our-guarantee" className={styles.dropdownItem}>Our Guarantee</Link>
           <Link href="/best-sellers" className={styles.dropdownItem}>Best Sellers</Link>
           <Link href="/promotions" className={styles.dropdownItem}>Promotions</Link>
-          <Link href="/contact-us" className={styles.dropdownItem}>Contact Us</Link>
+          <Link href="/service/contact-us" className={styles.dropdownItem}>Contact Us</Link>
           <Link href="/blog" className={styles.dropdownItem}>Blog</Link>
         </div>
       )}

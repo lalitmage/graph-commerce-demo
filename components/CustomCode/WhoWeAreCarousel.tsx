@@ -1,10 +1,14 @@
 import { Box, Container, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useQuery } from '@graphcommerce/graphql'
-import { GetWhyWeAreCmsBlockDocument, GetWhyWeAreCmsBlockQuery } from './GraphqlQuries/GetWhyWeAreCmsBlock.gql'
+import {
+  GetWhyWeAreCmsBlockDocument,
+  GetWhyWeAreCmsBlockQuery,
+} from './GraphqlQuries/GetWhyWeAreCmsBlock.gql'
 import he from 'he'
 import parse, { domToReact, Element as HtmlParserElement } from 'html-react-parser'
 import styles from './WhoWeAreCarousel.module.css'
+import Link from 'next/link'
 
 const CATEGORY_ITEMS_SELECTOR = '.item'
 
@@ -18,7 +22,8 @@ export function WhoWeAreCarousel({ data }: WhoWeAreCarouselProps) {
     fetchPolicy: 'no-cache',
   })
 
-  const rawHtml = data?.cmsBlocks?.items?.[0]?.content ?? queryData?.cmsBlocks?.items?.[0]?.content ?? ''
+  const rawHtml =
+    data?.cmsBlocks?.items?.[0]?.content ?? queryData?.cmsBlocks?.items?.[0]?.content ?? ''
   const decodedHtml = he.decode(rawHtml)
 
   const [itemsHtml, setItemsHtml] = useState<string[]>([])
@@ -29,7 +34,7 @@ export function WhoWeAreCarousel({ data }: WhoWeAreCarouselProps) {
     const parser = new DOMParser()
     const doc = parser.parseFromString(decodedHtml, 'text/html')
     const items = Array.from(doc.querySelectorAll(CATEGORY_ITEMS_SELECTOR)).map(
-      (item) => item.outerHTML
+      (item) => item.outerHTML,
     )
     const title = doc.querySelector('.title-name')?.textContent ?? 'Who Are We?'
 
@@ -76,10 +81,48 @@ export function WhoWeAreCarousel({ data }: WhoWeAreCarouselProps) {
                     domNode.name === 'a' &&
                     domNode.attribs?.href
                   ) {
+                    // const rawHref = domNode.attribs.href
+
+                    // const cleanedHref = rawHref
+                    //   .replace('{{store url=\'', '')
+                    //   .replace('\'}}', '')
+                    //   .replace(/\.html$/, '')
+                    //   .trim()
+
+                    // const nextHref = `/${cleanedHref}`
+
+                    let rawHref = domNode.attribs.href?.trim() || ''
+
+// Case 1: Magento-style {{store url='about-us.html'}}
+if (rawHref.includes("{{store url=")) {
+  rawHref = rawHref.replace(/^\{\{store url='?/, '').replace(/'?}}$/, '')
+}
+
+// Case 2: Full absolute URL like https://indiastaging.tonggardenintranetlive.com/about-us.html
+if (rawHref.startsWith('http')) {
+  try {
+    const parsed = new URL(rawHref)
+    rawHref = parsed.pathname // "/about-us.html"
+  } catch (e) {
+    rawHref = '/' // fallback
+  }
+}
+
+// Clean `.html` and trailing slashes
+const cleanedHref = rawHref.replace(/\.html$/, '').replace(/^\/+/, '/')
+
+// const nextHref = cleanedHref || '/'
+const nextHref = cleanedHref ? `/${cleanedHref}` : '/'
+
+
+
+
                     return (
-                      <a href={domNode.attribs.href} className={styles.btnTheme}>
-                        {domToReact(domNode.children as unknown as import('html-react-parser').DOMNode[])}
-                      </a>
+                      <Link href={nextHref} legacyBehavior passHref>
+                        <a className={styles.btnTheme}>
+                          {domToReact(domNode.children as any)}
+                        </a>
+                      </Link>
                     )
                   }
                 },
@@ -116,10 +159,6 @@ export function WhoWeAreCarousel({ data }: WhoWeAreCarouselProps) {
     </Container>
   )
 }
-
-
-
-
 
 
 
