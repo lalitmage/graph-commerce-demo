@@ -1,0 +1,31 @@
+query GetCategories {
+  categories(filters: { parent_id: { eq: "2" } }, pageSize: 100) {
+    items {
+      uid
+      level
+      name
+
+      children {
+        uid
+        level
+        name
+
+        children {
+          uid
+          level
+          name
+        }
+        children {
+          uid
+          level
+          name
+        }
+        children {
+          uid
+          level
+          name
+        }
+      }
+    }
+  }
+}

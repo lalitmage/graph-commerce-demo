@@ -27,94 +27,228 @@ index 0000000..705b087
 +import * as Types from '@graphcommerce/graphql-mesh/.mesh';
 +
 +export type CategorySearchResultFragment = { uid: string, url_path?: string | null, name?: string | null, include_in_menu?: number | null, breadcrumbs?: Array<{ category_uid: string, category_name?: string | null, category_url_path?: string | null, category_level?: number | null } | null> | null };
+diff --git a/node_modules/@graphcommerce/magento-search/components/ProductFiltersPro/ProductFiltersProSearchInput.tsx b/node_modules/@graphcommerce/magento-search/components/ProductFiltersPro/ProductFiltersProSearchInput.tsx
+index 1368a0c..9fcd4d3 100644
+--- a/node_modules/@graphcommerce/magento-search/components/ProductFiltersPro/ProductFiltersProSearchInput.tsx
++++ b/node_modules/@graphcommerce/magento-search/components/ProductFiltersPro/ProductFiltersProSearchInput.tsx
+@@ -108,11 +108,11 @@ export function ProductFiltersProSearchOutlinedInput(props: ProductFiltersProSea
+       <OutlinedInput
+         color='primary'
+         size={size}
+-        endAdornment={
+-          <IconButton color='inherit' size='small' {...buttonProps}>
+-            <IconSvg src={iconClose} size='large' />
+-          </IconButton>
+-        }
++        // endAdornment={
++        //   <IconButton color='inherit' size='small' {...buttonProps}>
++        //     <IconSvg src={iconClose} size='large' />
++        //   </IconButton>
++        // }
+         {...rest}
+       />
+     </FormControl>
 diff --git a/node_modules/@graphcommerce/magento-search/components/ProductFiltersPro/SearchField.tsx b/node_modules/@graphcommerce/magento-search/components/ProductFiltersPro/SearchField.tsx
-index e2e243d..ffb63af 100644
+index e2e243d..6b18444 100644
 --- a/node_modules/@graphcommerce/magento-search/components/ProductFiltersPro/SearchField.tsx
 +++ b/node_modules/@graphcommerce/magento-search/components/ProductFiltersPro/SearchField.tsx
-@@ -2,9 +2,8 @@ import { iconSearch, IconSvg, showPageLoadIndicator } from '@graphcommerce/next-
+@@ -1,10 +1,14 @@
+-import { iconSearch, IconSvg, showPageLoadIndicator } from '@graphcommerce/next-ui'
++import { iconSearch, IconSvg } from '@graphcommerce/next-ui'
  import type { FabProps } from '@mui/material'
- import { Fab } from '@mui/material'
+-import { Fab } from '@mui/material'
++import { Box, MenuItem, Select } from '@mui/material'
  import dynamic from 'next/dynamic'
--import { useMemo, useState } from 'react'
-+import { useEffect } from 'react'
+ import { useMemo, useState } from 'react'
  import type { ProductFiltersProSearchInputProps } from './ProductFiltersProSearchInput'
--import { useSearchPageAndParam } from './useSearchPageAndParam'
+ import { useSearchPageAndParam } from './useSearchPageAndParam'
++import { GetCategoriesDocument, GetCategoriesQuery } from '../../../../../components/CustomCode/GraphqlQuries/AllCategories.gql' 
++import { useQuery } from '@graphcommerce/graphql'
++import { useRef } from 'react'
++
  
  export type SearchFieldProps = ProductFiltersProSearchInputProps & {
    fab?: FabProps
-@@ -17,44 +16,38 @@ const ProductFiltersProSearchInputLazy = dynamic(
- )
+@@ -25,41 +29,232 @@ export function SearchField(props: SearchFieldProps) {
+     if (!searchPage) setExpanded(searchPage)
+   }, [searchPage])
  
- export function SearchField(props: SearchFieldProps) {
--  const { fab, formControl, visible: incomingVisible } = props
-+  const { fab, formControl } = props
- 
--  const [searchPage] = useSearchPageAndParam()
--  const [expanded, setExpanded] = useState(searchPage)
--  useMemo(() => {
--    if (!searchPage) setExpanded(searchPage)
--  }, [searchPage])
--
 -  const visible = incomingVisible || expanded || searchPage
-+  useEffect(() => {
-+    // Ensure the search field is focused when the component mounts
-+    setTimeout(() => {
-+      document.querySelector<HTMLInputElement>('input')?.focus()
-+    }, 100)
-+  }, [])
++  const visible = incomingVisible ?? true
++
++
++
++
++  function flattenCategories(items: NonNullable<GetCategoriesQuery['categories']>['items'] = []) {
++  const flat: { uid: string; name: string }[] = []
++
++  const walk = (nodes: typeof items) => {
++    for (const node of nodes || []) {
++      if (node?.name && node.uid) {
++        flat.push({ uid: node.uid, name: node.name })
++      }
++      if (node?.children) walk(node.children)
++    }
++  }
++
++  walk(items)
++  return flat
++}
++
++
++const [selectedCategory, setSelectedCategory] = useState('all')
++
++  const { data } = useQuery(GetCategoriesDocument)
++const categoryList = flattenCategories(data?.categories?.items)
++
++const selectRef = useRef<HTMLDivElement | null>(null)
++// const anchorRef = useRef<HTMLDivElement>(null)
++
++
++
++
  
    return (
-     <>
+-    <>
 -      {visible && (
--        <ProductFiltersProSearchInputLazy
--          {...props}
--          formControl={formControl}
--          inputRef={(element: HTMLInputElement) => element?.focus()}
++    <Box
++      sx={{
++        display: 'flex',
++        alignItems: 'center',
++        border: '1px solid #d9d9d9',
++        borderRadius: '40px',
++        overflow: 'hidden',
++        height: 48,
++        maxWidth: 600,
++        width: '100%',
++        backgroundColor: '#fff',
++        boxShadow: '0px 1px 2px rgba(0,0,0,0.05)',
++      }}
++    >
++      {/* Section 1: Search Input (60%) */}
++      <Box sx={{ width: '50%', pl: 2 }}>
+         <ProductFiltersProSearchInputLazy
+           {...props}
+           formControl={formControl}
+           inputRef={(element: HTMLInputElement) => element?.focus()}
 -          // autoFocus
--          buttonProps={{
+           buttonProps={{
 -            onClick: () => {
 -              setExpanded(false)
 -            },
--          }}
--          onBlur={() => {
++            onClick: () => setExpanded(false),
+           }}
+           onBlur={() => {
 -            if (!searchPage && !showPageLoadIndicator.get()) setExpanded(false)
--          }}
--        />
++            if (!searchPage) setExpanded(false)
++          }}
++          sx={{
++            '& .MuiOutlinedInput-notchedOutline': {
++              border: 'none',
++            },
++            '& .MuiOutlinedInput-root': {
++              paddingRight: 0,
++              height: 48,
++            },
++            '& input': {
++              padding: '0 8px',
++              fontSize: '15px',
++            },
+           }}
+         />
 -      )}
-+      {/* Search Field Always Visible */}
-+      <ProductFiltersProSearchInputLazy
-+        {...props}
-+        formControl={formControl}
-+        inputRef={(element: HTMLInputElement) => element?.focus()}
-+        onBlur={(event) => {
-+          event.preventDefault()
-+          event.stopPropagation() // Prevent closing on blur
-+        }}
-+      />
-+
-+      {/* Search Icon (Still Present) */}
-       <Fab
-         onClick={() => {
+-      <Fab
+-        onClick={() => {
 -          setExpanded(true)
 -          // inputRef.current?.focus()
-+          document.querySelector<HTMLInputElement>('input')?.focus()
++      </Box>
++
++      {/* Section 2: Category Dropdown (25%) */}
++
++
++<Select
++  value={selectedCategory}
++  onChange={(e) => setSelectedCategory(e.target.value)}
++  variant='standard'
++  disableUnderline
++  inputRef={selectRef}
++  displayEmpty
++  renderValue={(selected) => {
++    if (selected === 'all') return 'All Categories'
++    return categoryList.find(cat => cat.uid === selected)?.name || ''
++  }}
++  MenuProps={{
++    anchorOrigin: {
++      vertical: 'bottom',
++      horizontal: 'left',
++    },
++    transformOrigin: {
++      vertical: 'top',
++      horizontal: 'left',
++    },
++    container: () => selectRef.current?.parentElement || null, // avoid error by not returning null
++    PaperProps: {
++      sx: {
++        mt: '4px',
++        borderRadius: '8px',
++        boxShadow: 3,
++        maxHeight: 600,
++        overflowY: 'auto',
++      },
++    },
++  }}
++  sx={{
++    width: '35%',
++    px: 2,
++    fontSize: '10px',
++    height: '100%',
++    '& .MuiSelect-select': {
++      display: 'flex',
++      alignItems: 'center',
++      height: '100%',
++    },
++    borderLeft: '1px solid #ccc',
++  }}
++>
++  {categoryList
++    .filter(cat => cat.uid !== 'all') // don't render All Categories in dropdown
++    .map((cat) => (
++      <MenuItem key={cat.uid} value={cat.uid}>
++        {cat.name}
++      </MenuItem>
++    ))}
++</Select>
++
++
++      {/* Section 3: Yellow Icon (15%) */}
++      <Box
++        sx={{
++          width: '15%',
++          minWidth: 50,
++          backgroundColor: '#FDB924',
++          height: '100%',
++          display: 'flex',
++          alignItems: 'center',
++          justifyContent: 'center',
++          borderTopRightRadius: '40px',
++          borderBottomRightRadius: '40px',
          }}
-         color='inherit'
-         size='large'
-         {...fab}
-         sx={[
+-        color='inherit'
+-        size='large'
+-        {...fab}
+-        sx={[
 -          { display: { xs: visible ? 'none' : 'inline-flex' } },
-+          { display: { xs: 'inline-flex' } },
-           ...(Array.isArray(fab?.sx) ? fab.sx : [fab?.sx]),
-         ]}
+-          ...(Array.isArray(fab?.sx) ? fab.sx : [fab?.sx]),
+-        ]}
        >
-@@ -63,3 +56,82 @@ export function SearchField(props: SearchFieldProps) {
-     </>
+-        <IconSvg src={iconSearch} size='large' />
+-      </Fab>
+-    </>
++        <IconSvg src={iconSearch} size='medium' sx={{ color: 'white' }} />
++      </Box>
++    </Box>
    )
  }
-+
-+
-+
 +
 +
 +
