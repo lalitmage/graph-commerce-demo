@@ -4,7 +4,9 @@ import { CustomerFab, CustomerMenuFabItem } from '@graphcommerce/magento-custome
 import { SearchFab, SearchField } from '@graphcommerce/magento-search'
 import { WishlistFab, WishlistMenuFabItem } from '@graphcommerce/magento-wishlist'
 import { Logo } from '../CustomCode/Logo'
-// import MenuDropdown from './MenuDropdown'
+import { Box,Typography } from '@mui/material'
+
+
 import Image from 'next/image'
 import {
   DesktopNavActions,
@@ -118,11 +120,7 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
           itemPadding='md'
         />
       </NavigationProvider>
-      {/* <div style={{ background: '#E9E9E9', textAlign: 'center', padding: '5px 0' }}>
-        <p style={{ fontFamily: 'Poppins, sans-serif', fontSize: '13px', color: '#222', margin: 0 }}>
-          Welcome to Tong Garden India
-        </p>
-      </div>  */}
+
 
       <HeaderTopContent />
 
@@ -134,16 +132,7 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
             <div className={styles.container}>
               <div className={styles.innerheader}>
                 <div className={styles.headerlogo}>
-                  {/* <Link href="/" passHref>
-                    <Image
-                      src="https://indiastaging.tonggardenintranetlive.com/media/logo/stores/1/logo_1.png"
-                      alt="Tong Garden"
-                   
-                      width={218}
-                      height={22}
-                      max-width={218}
-                    />
-                  </Link> */}
+          
 
                   <Logo />
                 </div>
@@ -161,17 +150,7 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
 
                     <WishlistFab icon={<FavoriteIcon fontSize='large' />} />
 
-                    {/* <CustomerFab guestHref='/account/signin' authHref='/account' />
-                
-                  
-                    <WishlistFab icon={<IconSvg src={iconHeart} size='large' />} /> */}
-                    {/* <Fab href='/account/signin' size='small' color='inherit' aria-label='Account'>
-  <AccountCircleIcon fontSize='medium' />
-</Fab>
-
-<Fab href='/wishlist' size='small' color='inherit' aria-label='Wishlist'>
-  <FavoriteIcon fontSize='medium' />
-</Fab> */}
+               
                     <Fab href='#' aria-label='Change Language' size='large' color='inherit'>
                       <PublicIcon fontSize='large' />
                     </Fab>
@@ -185,41 +164,12 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
                       <IconSvg src={iconCustomerService} size='large' />
                     </Fab>
 
-                    {/* The placeholder exists because the CartFab is sticky but we want to reserve the space for the <CartFab /> */}
-                    {/* {cartEnabled && <PlaceholderFab />} */}
-                    {/* <MenuDropdown /> */}
+            
                   </DesktopNavActions>
                   <MenuDropdown />
                 </div>
               </div>
             </div>
-
-            {/* <Logo /> */}
-            {/* 
-            <DesktopNavBar>
-              {menu?.items?.[0]?.children?.slice(0, 2).map((item) => (
-                <DesktopNavItem key={item?.uid} href={`/${item?.url_path}`}>
-                  {item?.name}
-                </DesktopNavItem>
-              ))}
-
-              <DesktopNavItem
-                onClick={() => selection.set([menu?.items?.[0]?.uid || ''])}
-                onKeyUp={(evt) => {
-                  if (evt.key === 'Enter') {
-                    selection.set([menu?.items?.[0]?.uid || ''])
-                  }
-                }}
-                tabIndex={0}
-              >
-                {menu?.items?.[0]?.name}
-                <IconSvg src={iconChevronDown} />
-              </DesktopNavItem>
-
-              <DesktopNavItem href='/blog'>
-                <Trans id='Blog' />
-              </DesktopNavItem>
-            </DesktopNavBar> */}
 
             <MobileTopRight>
               <SearchFab size='responsiveMedium' />
@@ -240,11 +190,58 @@ export function LayoutNavigation(props: LayoutNavigationProps) {
                 searchField={{ productListRenderer }}
               />
 
-              <ShoppingBasket />
+              {/* <ShoppingBasket /> */}
+              <Box
+  sx={{
+    display: 'flex',
+    alignItems: 'center',
+    gap: 1
+  }}
+>
+  <CartFab
+    icon={
+      <img
+        src='https://indiastaging.tonggardenintranetlive.com/static/frontend/Tonggarden/tg/en_US/images/icon-cart.png'
+        alt='Shopping Basket'
+        style={{ width: 32, height: 32 }}
+      />
+    }
+    sx={{
+      boxShadow: 'none',
+      backgroundColor: 'transparent',
+      width: 'auto',
+      height: 'auto',
+      minHeight: 0,
+      minWidth: 0,
+      p: 0,
+      '&:hover': {
+        backgroundColor: 'transparent',
+      },
+    }}
+    BadgeProps={{
+      sx: {
+        '& .MuiBadge-badge': {
+          backgroundColor: '#ff0000',
+          color: '#fff',
+          fontSize: '10px',
+          right: -4,
+          top: 0,
+        },
+      },
+    }}
+  />
+     <Typography
+          variant="subtitle2"
+          sx={{ fontWeight: 'bold', textTransform: 'uppercase', fontSize: '14px' }}
+        >
+          Shopping Basket
+        </Typography>
+</Box>
+              
             </div>
           </div>
         </div>
-        <div>{/* <BannerSlider /> */}</div>
+     
         {children}
       </LayoutDefault>
     </>
