@@ -1,5 +1,5 @@
 diff --git a/node_modules/@graphcommerce/next-ui/LayoutDefault/components/LayoutDefault.tsx b/node_modules/@graphcommerce/next-ui/LayoutDefault/components/LayoutDefault.tsx
-index 30fc40b..75c4f8a 100644
+index 30fc40b..7601163 100644
 --- a/node_modules/@graphcommerce/next-ui/LayoutDefault/components/LayoutDefault.tsx
 +++ b/node_modules/@graphcommerce/next-ui/LayoutDefault/components/LayoutDefault.tsx
 @@ -63,7 +63,8 @@ export function LayoutDefault(props: LayoutDefaultProps) {
@@ -12,22 +12,49 @@ index 30fc40b..75c4f8a 100644
          }),
          ...(Array.isArray(sx) ? sx : [sx]),
        ]}
-@@ -77,6 +78,7 @@ export function LayoutDefault(props: LayoutDefaultProps) {
+@@ -75,30 +76,26 @@ export function LayoutDefault(props: LayoutDefaultProps) {
+           sizing='shell'
+           maxWidth={false}
            component='header'
-           className={classes.header}
+-          className={classes.header}
++          // className={classes.header}
++            className={`${classes.header} ${!noSticky ? 'sticky' : ''}`}
            sx={(theme) => ({
 +           
              zIndex: theme.zIndex.appBar - 1,
-             display: 'flex',
-             alignItems: 'center',
-@@ -92,6 +94,7 @@ export function LayoutDefault(props: LayoutDefaultProps) {
-               display: 'flex',
-               justifyContent: 'left',
-               width: '100%',
+-            display: 'flex',
+-            alignItems: 'center',
+-            justifyContent: 'center',
+-            height: theme.appShell.headerHeightSm,
++          
+             pointerEvents: 'none',
+             '& > *': {
+               pointerEvents: 'all',
+             },
+             [theme.breakpoints.up('md')]: {
+-              height: theme.appShell.headerHeightMd,
+-              top: 0,
+-              display: 'flex',
+-              justifyContent: 'left',
+-              width: '100%',
+-            },
+-            '&.sticky': {
+-              [theme.breakpoints.down('md')]: {
+-                position: 'sticky',
+-                top: 0,
+-              },
++             
 +              backgroundColor :'#0E1D6B'
              },
-             '&.sticky': {
-               [theme.breakpoints.down('md')]: {
++         '&.sticky': {
++  position: 'sticky',
++  top: 0,
++  zIndex: theme.zIndex.appBar,
++},
++
+           })}
+         >
+           {header}
 diff --git a/node_modules/@graphcommerce/next-ui/LayoutParts/DesktopNavActions.tsx b/node_modules/@graphcommerce/next-ui/LayoutParts/DesktopNavActions.tsx
 index a00717a..fe5c56d 100644
 --- a/node_modules/@graphcommerce/next-ui/LayoutParts/DesktopNavActions.tsx
