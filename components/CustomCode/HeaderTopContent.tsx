@@ -11,8 +11,7 @@ export function HeaderTopContent() {
     fetchPolicy: 'no-cache', // Disable caching for this query to get fresh data every time
   })
 
-  console.log('GraphQL data:', data)
-  console.log('GraphQL error:', error)
+
 
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error loading content</div>
