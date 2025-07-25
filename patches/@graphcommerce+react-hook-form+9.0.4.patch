@@ -1,0 +1,436 @@
+diff --git a/node_modules/@graphcommerce/react-hook-form/__mocks__/TestShippingAddressForm.gql.ts b/node_modules/@graphcommerce/react-hook-form/__mocks__/TestShippingAddressForm.gql.ts
+new file mode 100644
+index 0000000..bca321c
+--- /dev/null
++++ b/node_modules/@graphcommerce/react-hook-form/__mocks__/TestShippingAddressForm.gql.ts
+@@ -0,0 +1,14 @@
++/* eslint-disable */
++import * as Types from '@graphcommerce/graphql-mesh/.mesh';
++
++import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
++
++export const TestShippingAddressFormDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"TestShippingAddressForm"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cartId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"address"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CartAddressInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"customerNote"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}},"defaultValue":{"kind":"StringValue","value":"joi","block":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"setShippingAddressesOnCart"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"cart_id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cartId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"shipping_addresses"},"value":{"kind":"ListValue","values":[{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"address"},"value":{"kind":"Variable","name":{"kind":"Name","value":"address"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"customer_notes"},"value":{"kind":"Variable","name":{"kind":"Name","value":"customerNote"}}}]}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cart"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<TestShippingAddressFormMutation, TestShippingAddressFormMutationVariables>;
++export type TestShippingAddressFormMutationVariables = Types.Exact<{
++  cartId: Types.Scalars['String']['input'];
++  address: Types.CartAddressInput;
++  customerNote?: Types.InputMaybe<Types.Scalars['String']['input']>;
++}>;
++
++
++export type TestShippingAddressFormMutation = { setShippingAddressesOnCart?: { cart: { id: string } } | null };
+diff --git a/node_modules/@graphcommerce/react-hook-form/src/useFormAutoSubmit.tsx b/node_modules/@graphcommerce/react-hook-form/src/useFormAutoSubmit.tsx
+index c172d75..883c896 100644
+--- a/node_modules/@graphcommerce/react-hook-form/src/useFormAutoSubmit.tsx
++++ b/node_modules/@graphcommerce/react-hook-form/src/useFormAutoSubmit.tsx
+@@ -1,14 +1,12 @@
+ /* eslint-disable react/no-unused-prop-types */
+-// eslint-disable-next-line import/no-extraneous-dependencies
+ import { useMemoObject } from '@graphcommerce/next-ui/hooks/useMemoObject'
+ import { cloneDeep } from '@apollo/client/utilities'
+-// eslint-disable-next-line import/no-extraneous-dependencies
+ import { debounce } from '@mui/material'
+-import React, { startTransition, useCallback, useEffect, useRef, useState } from 'react'
++import React, { useCallback, useEffect, useRef, useState } from 'react'
+ import type {
+-  DeepPartialSkipArrayKey,
+   FieldPath,
+   FieldValues,
++  Path,
+   UseFormReturn,
+   UseWatchProps,
+ } from 'react-hook-form'
+@@ -17,44 +15,17 @@ import type { DebounceSettings } from './utils/useDebounce'
+ import { useDebounce } from './utils/useDebounce'
+ 
+ export type UseFormAutoSubmitOptions<TForm extends UseFormReturn<V>, V extends FieldValues> = {
+-  /** Instance of current form */
+   form: Omit<TForm, 'handleSubmit'>
+-  /** SubmitHandler */
+   submit: ReturnType<TForm['handleSubmit']>
+-  /** Milliseconds to wait before updating */
+   wait?: number
+-  /** Autosubmit only when these field names update */
+   fields?: FieldPath<V>[]
+-
+-  /**
+-   * Forces the form to submit directly when it is valid, whithout user interaction. Please be aware
+-   * that this may cause extra requests
+-   */
+   forceInitialSubmit?: boolean
+-  /** Disables the hook */
+   disabled?: boolean
+ }
+ 
+ /**
+- * Make sure the form is set to { mode: 'onChange' }
+- *
+- * The form will automatically submit when:
+- *
+- * - The form is dirty (has modifications)
+- * - The form is valid (has no errors)
+- * - The form is not already submitting
+- * - The form is not currently validating
+- *
+- * Q: The form keeps submitting in loops: A: formState.isDirty should be false after submission Make
+- * sure that you call `reset(getValues())` after submission.
+- *
+- * @deprecated Please use the <FormAutoSubmit /> component instead. This method causes excessive
+- *   rerenders.
+- * @see useFormGqlMutation.tsx for an example implementation
+- *
+- * Q: How to I resubmit if the form is modified during the request?
+- *    formState.isDirty should be true after the submission
+- * @see useFormGqlMutation.tsx for an example implementation
++ * Auto-submit hook for forms.
++ * @deprecated Please use the <FormAutoSubmit /> component instead.
+  */
+ export function useFormAutoSubmit<
+   Form extends UseFormReturn<V>,
+@@ -71,27 +42,21 @@ export function useFormAutoSubmit<
+   const force = formState.submitCount === 0 && forceInitialSubmit
+   const shouldSubmit = formState.isDirty && values !== oldValues
+ 
+-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   const submitDebounced = useCallback(
+     debounce(async () => {
+       setSubmitting(true)
+-
+       try {
+         await submit()
+-      } catch (e) {
+-        // We're not interested if the submission actually succeeds, that should be handled by the form itself.
+-      }
+-
++      } catch (_) {}
+       setOldValues(values)
+       setSubmitting(false)
+     }, wait),
+-    [submit],
++    [submit, wait, values],
+   )
+ 
+   useEffect(() => {
+     if (!disabled && canSubmit && (force || shouldSubmit)) {
+-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+-      submitDebounced()
++      void submitDebounced()
+       return () => submitDebounced.clear()
+     }
+     return () => {}
+@@ -101,33 +66,15 @@ export function useFormAutoSubmit<
+ }
+ 
+ export type FormAutoSubmitProps<TFieldValues extends FieldValues = FieldValues> = {
+-  /** Autosubmit only when these field names update */
+-
+-  /** SubmitHandler */
+-  // eslint-disable-next-line react/no-unused-prop-types
+   submit: ReturnType<UseFormReturn<TFieldValues>['handleSubmit']>
+-
+-  /**
+-   * When a current submission is already in flight, should we wait for it to finish before
+-   * submitting again?
+-   */
+-  // eslint-disable-next-line react/no-unused-prop-types
+   parallel?: boolean
+-
+   noValidate?: boolean
+-
+   wait?: number
+-
+-  /**
+-   * Only 0 does anthing and will submit immediately. Any other value will be ignored.
+-   *
+-   * @deprecated Please use leading instead
+-   */
+   initialWait?: number
+ } & Omit<UseWatchProps<TFieldValues>, 'defaultValue'> &
+   DebounceSettings
+ 
+-function useAutoSubmitBase<TFieldValues extends FieldValues = FieldValues>(
++function useAutoSubmitBase<TFieldValues extends FieldValues>(
+   props: FormAutoSubmitProps<TFieldValues>,
+ ) {
+   const {
+@@ -136,28 +83,34 @@ function useAutoSubmitBase<TFieldValues extends FieldValues = FieldValues>(
+     maxWait,
+     leading,
+     trailing,
+-
+     submit,
+     parallel,
+     noValidate,
+-    ...watchOptions
++    name,
++    control,
++    exact,
++    disabled,
+   } = props
+ 
+-  // We create a stable object from the values, so that we can compare them later
+-  const values = useMemoObject(cloneDeep(useWatch(watchOptions)))
+-  const oldValues = useRef<DeepPartialSkipArrayKey<TFieldValues>>(values)
+-  const { isValidating, isSubmitting, isValid } = useFormState(watchOptions)
++  const watchOptions = {
++    name: name ? (Array.isArray(name) ? name : [name]) as readonly Path<TFieldValues>[] : [],
++    control,
++    exact,
++    disabled,
++  }
++
++  // UseWatch return type inferred correctly here
++  const watched = useMemoObject(cloneDeep(useWatch(watchOptions)))
++  const oldValues = useRef<typeof watched>(watched)
++
++  const { isValidating, isSubmitting, isValid } = useFormState({ control })
+ 
+   const submitDebounced = useDebounce(
+     async () => {
+       try {
+-        await new Promise((resolve) => {
+-          oldValues.current = values
+-          resolve(null)
+-        }).then(() => submit())
+-      } catch (e) {
+-        // We're not interested if the submission actually succeeds, that should be handled by the form itself.
+-      }
++        oldValues.current = watched
++        await submit()
++      } catch (_) {}
+     },
+     wait,
+     { leading: leading ?? initialWait === 0, maxWait, trailing },
+@@ -167,16 +120,11 @@ function useAutoSubmitBase<TFieldValues extends FieldValues = FieldValues>(
+   const allowed = parallel || !isSubmitting
+   const canSubmit = valid && allowed
+ 
+-  if (canSubmit && values !== oldValues.current) {
+-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+-    submitDebounced()
++  if (canSubmit && JSON.stringify(watched) !== JSON.stringify(oldValues.current)) {
++    void submitDebounced()
+   }
+ }
+ 
+-/**
+- * This is made a components so the useWatch that is used here doesn't retrigger the rerender of the
+- * parent component.
+- */
+ function FormAutoSubmitBase<TFieldValues extends FieldValues = FieldValues>(
+   props: FormAutoSubmitProps<TFieldValues>,
+ ) {
+@@ -185,3 +133,214 @@ function FormAutoSubmitBase<TFieldValues extends FieldValues = FieldValues>(
+ }
+ 
+ export const FormAutoSubmit = React.memo(FormAutoSubmitBase) as typeof FormAutoSubmitBase
++			
++
++
++
++// /* eslint-disable react/no-unused-prop-types */
++// // eslint-disable-next-line import/no-extraneous-dependencies
++// import { useMemoObject } from '@graphcommerce/next-ui/hooks/useMemoObject'
++// import { cloneDeep } from '@apollo/client/utilities'
++// // eslint-disable-next-line import/no-extraneous-dependencies
++// import { debounce } from '@mui/material'
++// import React, { startTransition, useCallback, useEffect, useRef, useState } from 'react'
++// import type {
++//   DeepPartialSkipArrayKey,
++//   FieldPath,
++//   FieldValues,
++//   UseFormReturn,
++//   UseWatchProps,
++// } from 'react-hook-form'
++// import { useFormState, useWatch } from 'react-hook-form'
++// import type { DebounceSettings } from './utils/useDebounce'
++// import { useDebounce } from './utils/useDebounce'
++
++// export type UseFormAutoSubmitOptions<TForm extends UseFormReturn<V>, V extends FieldValues> = {
++//   /** Instance of current form */
++//   form: Omit<TForm, 'handleSubmit'>
++//   /** SubmitHandler */
++//   submit: ReturnType<TForm['handleSubmit']>
++//   /** Milliseconds to wait before updating */
++//   wait?: number
++//   /** Autosubmit only when these field names update */
++//   fields?: FieldPath<V>[]
++
++//   /**
++//    * Forces the form to submit directly when it is valid, whithout user interaction. Please be aware
++//    * that this may cause extra requests
++//    */
++//   forceInitialSubmit?: boolean
++//   /** Disables the hook */
++//   disabled?: boolean
++// }
++
++// /**
++//  * Make sure the form is set to { mode: 'onChange' }
++//  *
++//  * The form will automatically submit when:
++//  *
++//  * - The form is dirty (has modifications)
++//  * - The form is valid (has no errors)
++//  * - The form is not already submitting
++//  * - The form is not currently validating
++//  *
++//  * Q: The form keeps submitting in loops: A: formState.isDirty should be false after submission Make
++//  * sure that you call `reset(getValues())` after submission.
++//  *
++//  * @deprecated Please use the <FormAutoSubmit /> component instead. This method causes excessive
++//  *   rerenders.
++//  * @see useFormGqlMutation.tsx for an example implementation
++//  *
++//  * Q: How to I resubmit if the form is modified during the request?
++//  *    formState.isDirty should be true after the submission
++//  * @see useFormGqlMutation.tsx for an example implementation
++//  */
++// export function useFormAutoSubmit<
++//   Form extends UseFormReturn<V>,
++//   V extends FieldValues = FieldValues,
++// >(options: UseFormAutoSubmitOptions<Form, V>) {
++//   const { form, submit, wait = 500, fields, forceInitialSubmit, disabled } = options
++//   const { formState } = form
++
++//   const [submitting, setSubmitting] = useState(false)
++//   const values = JSON.stringify(fields ? form.watch(fields) : form.watch())
++//   const [oldValues, setOldValues] = useState<string>(values)
++
++//   const canSubmit = formState.isValid && !formState.isSubmitting && !formState.isValidating
++//   const force = formState.submitCount === 0 && forceInitialSubmit
++//   const shouldSubmit = formState.isDirty && values !== oldValues
++
++//   // eslint-disable-next-line react-hooks/exhaustive-deps
++//   const submitDebounced = useCallback(
++//     debounce(async () => {
++//       setSubmitting(true)
++
++//       try {
++//         await submit()
++//       } catch (e) {
++//         // We're not interested if the submission actually succeeds, that should be handled by the form itself.
++//       }
++
++//       setOldValues(values)
++//       setSubmitting(false)
++//     }, wait),
++//     [submit],
++//   )
++
++//   useEffect(() => {
++//     if (!disabled && canSubmit && (force || shouldSubmit)) {
++//       // eslint-disable-next-line @typescript-eslint/no-floating-promises
++//       submitDebounced()
++//       return () => submitDebounced.clear()
++//     }
++//     return () => {}
++//   }, [canSubmit, force, shouldSubmit, submitDebounced, disabled])
++
++//   return submitting
++// }
++
++// export type FormAutoSubmitProps<TFieldValues extends FieldValues = FieldValues> = {
++//   /** Autosubmit only when these field names update */
++
++//   /** SubmitHandler */
++//   // eslint-disable-next-line react/no-unused-prop-types
++//   submit: ReturnType<UseFormReturn<TFieldValues>['handleSubmit']>
++
++//   /**
++//    * When a current submission is already in flight, should we wait for it to finish before
++//    * submitting again?
++//    */
++//   // eslint-disable-next-line react/no-unused-prop-types
++//   parallel?: boolean
++
++//   noValidate?: boolean
++
++//   wait?: number
++
++//   /**
++//    * Only 0 does anthing and will submit immediately. Any other value will be ignored.
++//    *
++//    * @deprecated Please use leading instead
++//    */
++//   initialWait?: number
++// } & Omit<UseWatchProps<TFieldValues>, 'defaultValue'> &
++//   DebounceSettings
++
++// function useAutoSubmitBase<TFieldValues extends FieldValues = FieldValues>(
++//   props: FormAutoSubmitProps<TFieldValues>,
++// ) {
++//   const {
++//     wait = 166,
++//     initialWait,
++//     maxWait,
++//     leading,
++//     trailing,
++
++//     submit,
++//     parallel,
++//     noValidate,
++//     ...watchOptions
++//   } = props
++
++// const {
++//   compute,
++//   name: rawName,
++//   ...restWatchOptions
++// } = watchOptions
++
++// const name = (Array.isArray(rawName)
++//   ? rawName
++//   : rawName !== undefined
++//     ? [rawName]
++//     : []) as readonly FieldPath<TFieldValues>[]
++
++// const values = useMemoObject(
++//   cloneDeep(
++//     compute
++//       ? useWatch({ ...restWatchOptions, name, compute })
++//       : useWatch({ ...restWatchOptions, name })
++//   )
++// )
++
++
++//   // const values = useMemoObject(cloneDeep(useWatch(watchOptions)))
++//   const oldValues = useRef<DeepPartialSkipArrayKey<TFieldValues>>(values)
++//   const { isValidating, isSubmitting, isValid } = useFormState(watchOptions)
++
++//   const submitDebounced = useDebounce(
++//     async () => {
++//       try {
++//         await new Promise((resolve) => {
++//           oldValues.current = values
++//           resolve(null)
++//         }).then(() => submit())
++//       } catch (e) {
++//         // We're not interested if the submission actually succeeds, that should be handled by the form itself.
++//       }   
++//     },
++//     wait,
++//     { leading: leading ?? initialWait === 0, maxWait, trailing },
++//   )
++
++//   const valid = (noValidate ? true : isValid) && !isValidating
++//   const allowed = parallel || !isSubmitting
++//   const canSubmit = valid && allowed
++
++//   if (canSubmit && values !== oldValues.current) {
++//     // eslint-disable-next-line @typescript-eslint/no-floating-promises
++//     submitDebounced()
++//   }
++// }
++
++// /**
++//  * This is made a components so the useWatch that is used here doesn't retrigger the rerender of the
++//  * parent component.
++//  */
++// function FormAutoSubmitBase<TFieldValues extends FieldValues = FieldValues>(
++//   props: FormAutoSubmitProps<TFieldValues>,
++// ) {
++//   useAutoSubmitBase(props)
++//   return null
++// }
++
++// export const FormAutoSubmit = React.memo(FormAutoSubmitBase) as typeof FormAutoSubmitBase
